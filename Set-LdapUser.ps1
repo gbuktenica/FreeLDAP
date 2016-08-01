@@ -33,7 +33,7 @@
 
     .NOTES  
         Author     : Glen Buktenica
-	    Version    : 1.0.0.1 20160801 Initial Build  
+        Version    : 1.0.0.1 20160801 Initial Build  
     #> 
     [CmdletBinding()]
     [OutputType([psobject])]
@@ -129,7 +129,7 @@
         Write-Verbose $Server
         Connect-LdapServer -Server $Server -Credential $Credential -ErrorAction Stop
     }
-	PROCESS 
+    PROCESS 
     {
         #Get all non manadatory parameters that have a value
         $MandatoryParameters = @("DistinguishedName","Server","Credential","TimeOut")
@@ -155,7 +155,7 @@
             }
         }     
     }
-	END 
+    END 
     {
         Connect-LdapServer -Disconnect
         Write-Verbose 'End Set-LdapUser'
