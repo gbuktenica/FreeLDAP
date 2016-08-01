@@ -26,8 +26,11 @@ TODO: Write usage instructions
 
 ## Contributing 
 Pull request against a development branch.
+
 [SemVer](http://semver.org) is used for versioning.
+
 Adhere to the [style guide](https://github.com/PoshCode/PowerShellPracticeAndStyle)
+
 Update [README](README.md) documentation as well to reflect contribution.
 ## History 
 
