@@ -25,9 +25,10 @@ C:\Users\<ProfilePath>\Documents\WindowsPowerShell\Modules\FreeLDAP\<version>
 TODO: Write usage instructions 
 
 ## Contributing 
-
-We use SemVer for versioning.
-
+Pull request against a development branch.
+[SemVer](http://semver.org) is used for versioning.
+Adhere to the [style guide](https://github.com/PoshCode/PowerShellPracticeAndStyle)
+Update [README](README.md) documentation as well to reflect contribution.
 ## History 
 
 1.0.0.0 Initial release   - stable
