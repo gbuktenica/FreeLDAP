@@ -1,6 +1,6 @@
 # FreeLDAP
 
-Uses the Dot NET class System.DirectoryServices.Protocols to get, set and move LDAP objects in standards compliant directories. 
+A PowerShell module that uses the Dot NET class System.DirectoryServices.Protocols to manage LDAP objects in standards compliant directories. 
 
 ## Installation 
 
