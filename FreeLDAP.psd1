@@ -68,7 +68,7 @@ FunctionsToExport = '*'
 
 # Cmdlets to export from this module
 CmdletsToExport = @(
-    'Get-LdapUser,Set-LdapUser,Connect-LdapServer,Move-LdapUser,Remove-LdapUser,New-LdapUser'
+    'Get-LdapUser,Set-LdapUser,Connect-LdapServer,Move-LdapUser,Remove-LdapUser,New-LdapUser,Get-LdapGroup'
     )
 
 # Variables to export from this module
@@ -82,7 +82,7 @@ ModuleList = @()
 
 # List of all files packaged with this module
 FileList = @(
-    'Connect-LdapServer.ps1','Get-ldapUser.ps1','Set-LdapUser.ps1','Move-LdapUser.ps1,'Remove-LdapUser.ps1','New-LdapUser.ps1'
+    'Connect-LdapServer.ps1','Get-ldapUser.ps1','Set-LdapUser.ps1','Move-LdapUser.ps1','Remove-LdapUser.ps1','New-LdapUser.ps1','Get-LdapGroup.ps1'
     )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
