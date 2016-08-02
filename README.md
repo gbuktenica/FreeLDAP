@@ -8,7 +8,8 @@ A PowerShell module that uses the Dot NET class System.DirectoryServices.Protoco
 Install-Module -Name FreeLDAP
 
 ### Offline
-Copy all file to one of the following locations:
+Copy all files to one of the following locations:
+
 C:\Program Files\WindowsPowerShell\Modules\FreeLDAP\<version> 
 
 	eg C:\Program Files\WindowsPowerShell\Modules\FreeLDAP\1.0.0.0
