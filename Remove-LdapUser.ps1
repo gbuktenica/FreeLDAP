@@ -8,7 +8,7 @@
         Uses the System.DirectoryServices Assembly to delete an LDAP user object in a Non-Microsoft LDAP directory.
 
     .PARAMETER DistinguishedName
-        The distinguished name that will have attributes edited.
+        The distinguished name that will be removed.
 
     .PARAMETER Server
         DNS name or IP address to connect to.
@@ -31,7 +31,7 @@
 
     .NOTES  
         Author     : Glen Buktenica
-	    Version    : 1.0.0.1 20160728 Alpha build 
+        Version    : 1.0.0.1 20160728 Alpha build 
     #> 
     [CmdletBinding()]
     [OutputType([psobject])]
