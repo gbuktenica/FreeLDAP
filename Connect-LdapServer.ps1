@@ -1,11 +1,11 @@
 ﻿Function Connect-LdapServer
 {
-    <#  
-    .SYNOPSIS  
+    <#
+    .SYNOPSIS
         Connect to an LDAP server.
 
     .DESCRIPTION
-        Bind to an LDAP server on port 389 using Dot NET class System.DirectoryServices.Protocols 
+        Bind to an LDAP server on port 389 using Dot NET class System.DirectoryServices.Protocols
         and save the connection to the global variable LdapConnection
 
     .PARAMETER Server
@@ -40,32 +40,32 @@
         Connect-LdapServer -Disconnect
         Disposes the LDAP connection and removes the global variable.
 
-    .NOTES  
+    .NOTES
         Author     : Glen Buktenica
-	    Version    : 1.0.0.0 20160704 Initial Build  
-    #> 
+	    Version    : 1.0.0.0 20160704 Initial Build
+    #>
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory=$false, 
-            ValueFromPipeline=$false)] 
-            [ValidateNotNullOrEmpty()] 
+        [Parameter(Mandatory=$false,
+            ValueFromPipeline=$false)]
+            [ValidateNotNullOrEmpty()]
             [string] $Server,
         [Parameter(Position=1,
-            Mandatory=$false, 
-            ValueFromPipeline=$false)] 
+            Mandatory=$false,
+            ValueFromPipeline=$false)]
             [System.Management.Automation.CredentialAttribute()]
             $Credential,
-        [Parameter(Mandatory=$false, 
-            ValueFromPipeline=$false)] 
+        [Parameter(Mandatory=$false,
+            ValueFromPipeline=$false)]
             [switch] $SecureSocketLayer,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $TimeOut = "10000",
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [switch] $Disconnect,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [int] $DirectoryVersion = 3
     )
@@ -95,7 +95,7 @@
     {
         Write-Verbose "LDAP connection already present to:"
         Write-Verbose $global:LdapConnection.SessionOptions.HostName
-        If ($global:LdapConnection.SessionOptions.HostName -ne $Server) 
+        If ($global:LdapConnection.SessionOptions.HostName -ne $Server)
         {
             Write-Verbose "Existing LDAP connection different to requested connection:"
             Write-Verbose $Server

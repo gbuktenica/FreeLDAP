@@ -1,7 +1,7 @@
 ﻿Function Set-LdapUser
 {
-    <#  
-    .SYNOPSIS  
+    <#
+    .SYNOPSIS
         Set attributes on an LDAP user.
 
     .DESCRIPTION
@@ -27,109 +27,109 @@
     .EXAMPLE
         Set-LdapUser -DistinguishedName "cn=Glen,ou=OU,o=Organisation" -DisabledFlag "1" -logindisabled "TRUE" -Credential $Credential -Server 10.1.1.1
         Sets the disabled flag to 1 and logindisabled setting to TRUE for LDAP user Glen
-    
+
     .OUTPUT
         LDAP return codes from LDAP server
 
-    .NOTES  
+    .NOTES
         Author     : Glen Buktenica
-	    Version    : 1.0.0.0 20160704 Initial Build  
-    #> 
+        Version    : 1.0.0.0 20160704 Initial Build
+    #>
     [CmdletBinding()]
     [OutputType([psobject])]
     Param
     (
-        [Parameter(Position=0, 
-            Mandatory=$true, 
-            ValueFromPipeline=$true, 
-            ValueFromPipelineByPropertyName=$true)] 
+        [Parameter(Position=0,
+            Mandatory=$true,
+            ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true)]
             [string] $DistinguishedName,
-        [Parameter(Mandatory=$true, 
+        [Parameter(Mandatory=$true,
             ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)] 
-            [ValidateNotNullOrEmpty()] 
+            ValueFromPipelineByPropertyName=$true)]
+            [ValidateNotNullOrEmpty()]
             [string] $Server,
-        [Parameter(Mandatory=$true, 
+        [Parameter(Mandatory=$true,
             ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)] 
+            ValueFromPipelineByPropertyName=$true)]
             [System.Management.Automation.CredentialAttribute()]
             $Credential,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)] 
+            ValueFromPipelineByPropertyName=$true)]
             [switch] $SecureSocketLayer,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)] 
+            ValueFromPipelineByPropertyName=$true)]
             [string] $TimeOut = "10000",
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $Fullname,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $GivenName,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $sn,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $initials,
-            [Parameter(Mandatory=$false, 
+            [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $logindisabled,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $telephonenumber,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $workforceid,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $managerworkforceid,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $sapposition,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $cn,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $saproles,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $ismanager,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $preferredname,
-            [Parameter(Mandatory=$false, 
+            [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $sapdateofbirth,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $mail,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $disabledflag,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $title,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipeline=$false)]
             [string] $userPassword
     )
-    BEGIN 
+    BEGIN
     {
         Write-Verbose 'Start Set-LdapUser'
         Write-Verbose "Loading required assemblies"
         Add-Type -AssemblyName System.DirectoryServices.Protocols -ErrorAction Stop
         Add-Type -AssemblyName System.Net -ErrorAction Stop
-        $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree 
+        $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree
         $attrlist = ,"*"
         Write-Verbose "Connecting to Server:"
         Write-Verbose $Server
         Connect-LdapServer -Server $Server -Credential $Credential -ErrorAction Stop
     }
-	PROCESS 
+    PROCESS
     {
         #Get all non manadatory parameters that have a value
         $MandatoryParameters = @("DistinguishedName","Server","Credential","TimeOut")
@@ -137,11 +137,11 @@
         Write-Output $DistinguishedName
         foreach ($Key in $Keys)
         {
-            
+
             $Variable = Get-Variable -Name $key -ErrorAction SilentlyContinue
             if($Variable.value -and $MandatoryParameters -notcontains $Variable.name)
             {
-                Write-Verbose $Variable.name 
+                Write-Verbose $Variable.name
                 Write-Verbose $Variable.value
                 $ModifyRequest = New-Object "System.DirectoryServices.Protocols.ModifyRequest"
                 $ModifyRequest.DistinguishedName = $DistinguishedName
@@ -150,12 +150,12 @@
                 $AttributeModification.Operation = [System.DirectoryServices.Protocols.DirectoryAttributeOperation]::Replace
                 $AttributeModification.Add($Variable.value) | Out-Null
                 $ModifyRequest.Modifications.Add($AttributeModification) | Out-Null
-                $Result = $global:LdapConnection.SendRequest($ModifyRequest)   
-                Write-Output $Result.ResultCode           
+                $Result = $global:LdapConnection.SendRequest($ModifyRequest)
+                Write-Output $Result.ResultCode
             }
-        }     
+        }
     }
-	END 
+    END
     {
         Connect-LdapServer -Disconnect
         Write-Verbose 'End Set-LdapUser'

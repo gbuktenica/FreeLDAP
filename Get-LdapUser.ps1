@@ -1,7 +1,7 @@
 ﻿Function Get-LdapUser
 {
-    <#  
-    .SYNOPSIS  
+    <#
+    .SYNOPSIS
         Search for User objects in an LDAP directory.
 
     .DESCRIPTION
@@ -28,59 +28,59 @@
     .EXAMPLE
         Get-LdapUser.ps1 -Name bukteng* -Server 10.1.1.1 -Credential (Get-Credential)
         LDAP bind to IP address 10.1.1.1 after prompting the operator for credentials and return all users matching bukteng*
-    
+
     .OUTPUT
         Distinguished name and other attributes that have values
 
-    .NOTES  
+    .NOTES
         Author     : Glen Buktenica
-	    Version    : 1.0.0.0 20160704 Initial Build 
-    #> 
+        Version    : 1.0.0.0 20160704 Initial Build
+    #>
     [CmdletBinding()]
     [OutputType([psobject])]
     Param
     (
-        [Parameter(Position=0, 
-            Mandatory=$true, 
-            ValueFromPipeline=$true, 
-            ValueFromPipelineByPropertyName=$true)] 
+        [Parameter(Position=0,
+            Mandatory=$true,
+            ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true)]
             [string[]] $Name,
-        [Parameter(Position=1, 
-            Mandatory=$true, 
+        [Parameter(Position=1,
+            Mandatory=$true,
             ValueFromPipeline=$true,
             ValueFromPipelineByPropertyName=$true)]
             [string] $SearchScope,
-        [Parameter(Position=2, 
-            Mandatory=$true, 
+        [Parameter(Position=2,
+            Mandatory=$true,
             ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)] 
+            ValueFromPipelineByPropertyName=$true)]
             [string] $Server,
         [Parameter(Mandatory=$true,
-            ValueFromPipeline=$true, 
-            ValueFromPipelineByPropertyName=$true)] 
+            ValueFromPipeline=$true,
+            ValueFromPipelineByPropertyName=$true)]
             [System.Management.Automation.CredentialAttribute()]
             $Credential,
-        [Parameter(Mandatory=$false, 
-            ValueFromPipelineByPropertyName=$false)] 
+        [Parameter(Mandatory=$false,
+            ValueFromPipelineByPropertyName=$false)]
             [switch] $SecureSocketLayer,
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipelineByPropertyName=$false)]
             [string] $TimeOut = "10000",
-        [Parameter(Mandatory=$false, 
+        [Parameter(Mandatory=$false,
             ValueFromPipelineByPropertyName=$false)]
             [switch] $PassThru
     )
-    BEGIN 
+    BEGIN
     {
         Write-Verbose 'Starting Get-LdapUser'
         Write-Verbose "Loading required assemblies"
         Add-Type -AssemblyName System.DirectoryServices.Protocols -ErrorAction Stop
         Add-Type -AssemblyName System.Net -ErrorAction Stop
-        $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree 
+        $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree
         $attrlist = ,"*"
         Connect-LdapServer -Server $Server -Credential $Credential -ErrorAction Stop
     }
-	PROCESS 
+    PROCESS
     {
         Write-Verbose "Searching for $Name"
         $Filter = "(&(cn=$Name)(objectClass=user))"
@@ -109,7 +109,7 @@
             $Return
         }
     }
-	END 
+    END
     {
         if (-not $PassThru)
         {
