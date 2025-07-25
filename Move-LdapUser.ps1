@@ -86,8 +86,8 @@
         $ModifyRequest.NewName = $NewName
         $ModifyRequest.NewParentDistinguishedName = $Destination
         $Result = $global:LdapConnection.SendRequest($ModifyRequest)
-        $WriteOuput = $NewName + "," + $Destination
-        Write-Output   $WriteOuput
+        $WriteOutput = $NewName + "," + $Destination
+        Write-Output   $WriteOutput
         Write-Output   $Result.ResultCode
         Write-Output   $Result.ErrorMessage
     }

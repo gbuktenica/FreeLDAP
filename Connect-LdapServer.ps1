@@ -25,7 +25,7 @@
 
     .PARAMETER DirectoryVersion
         Connects to the LDAP server with a request version of LDAP.
-        Defaul value 3
+        Default value 3
 
     .EXAMPLE
         Connect-LdapServer -Server 10.1.1.1 -Credential (Get-Credential)
