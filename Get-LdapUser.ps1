@@ -1,5 +1,4 @@
-﻿Function Get-LdapUser
-{
+﻿function Get-LdapUser {
     <#
     .SYNOPSIS
         Search for User objects in an LDAP directory.
@@ -34,88 +33,78 @@
 
     .NOTES
         Author     : Glen Buktenica
-        Version    : 1.0.0.0 20160704 Initial Build
+        Version    : 1.1 20250725 Republish
     #>
     [CmdletBinding()]
     [OutputType([psobject])]
-    Param
+    param
     (
-        [Parameter(Position=0,
-            Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string[]] $Name,
-        [Parameter(Position=1,
-            Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string] $SearchScope,
-        [Parameter(Position=2,
-            Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string] $Server,
-        [Parameter(Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [System.Management.Automation.CredentialAttribute()]
-            $Credential,
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [switch] $SecureSocketLayer,
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [string] $TimeOut = "10000",
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [switch] $PassThru
+        [Parameter(Position = 0,
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string[]] $Name,
+        [Parameter(Position = 1,
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string] $SearchScope,
+        [Parameter(Position = 2,
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string] $Server,
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [System.Management.Automation.CredentialAttribute()]
+        $Credential,
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [switch] $SecureSocketLayer,
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [string] $TimeOut = "10000",
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [switch] $PassThru
     )
-    BEGIN
-    {
+    begin {
         Write-Verbose 'Starting Get-LdapUser'
         Write-Verbose "Loading required assemblies"
         Add-Type -AssemblyName System.DirectoryServices.Protocols -ErrorAction Stop
         Add-Type -AssemblyName System.Net -ErrorAction Stop
         $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree
-        $attrlist = ,"*"
+        $attrlist = , "*"
         Connect-LdapServer -Server $Server -Credential $Credential -ErrorAction Stop
     }
-    PROCESS
-    {
+    process {
         Write-Verbose "Searching for $Name"
         $Filter = "(&(cn=$Name)(objectClass=user))"
-        $ResponseUsers = New-Object System.DirectoryServices.Protocols.SearchRequest -ArgumentList $SearchScope,$Filter,$Scope,$attrlist
+        $ResponseUsers = New-Object System.DirectoryServices.Protocols.SearchRequest -ArgumentList $SearchScope, $Filter, $Scope, $attrlist
         $ResultUsers = ($global:LdapConnection.SendRequest($ResponseUsers)).Entries
-        foreach ($ResultUser in $ResultUsers)
-        {
+        foreach ($ResultUser in $ResultUsers) {
             #$ResultUser.Attributes
             $Return = New-Object PSObject
             $Return | Add-Member Noteproperty DistinguishedName ($ResultUser.DistinguishedName)
             $Keys = $ResultUser.Attributes.keys
-            foreach ($Key in $Keys)
-            {
-                If ($Key -ne "jpegphoto")
-                {
-                    $Return | Add-Member Noteproperty $Key ($ResultUser.Attributes.$Key |? {$_}| ForEach-Object {[System.Text.Encoding]::ASCII.GetString($_)})
+            foreach ($Key in $Keys) {
+                if ($Key -ne "jpegphoto") {
+                    $Return | Add-Member Noteproperty $Key ($ResultUser.Attributes.$Key | Where-Object { $_ } | ForEach-Object { [System.Text.Encoding]::ASCII.GetString($_) })
                 }
             }
         }
-        If ($Return.length -eq 0)
-        {
+        if ($Return.length -eq 0) {
             Write-Error "$Name not found"
-        }
-        Else
-        {
+        } else {
             $Return
         }
     }
-    END
-    {
-        if (-not $PassThru)
-        {
+    end {
+        if (-not $PassThru) {
             Connect-LdapServer -Disconnect
         }
         Write-Verbose 'End Get-LdapUser'
     }
 }
-Export-ModuleMember -function Get-LdapUser
+Export-ModuleMember -Function Get-LdapUser

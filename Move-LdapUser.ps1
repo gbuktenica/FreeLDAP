@@ -1,5 +1,4 @@
-﻿Function Move-LdapUser
-{
+﻿function Move-LdapUser {
     <#
     .SYNOPSIS
         Search for User objects in an LDAP directory.
@@ -34,70 +33,67 @@
 
     .NOTES
         Author     : Glen Buktenica
-        Version    : 1.0.0.0 20160704 Initial Build
+        Version    : 1.1 20250725 Republish
     #>
     [CmdletBinding()]
     [OutputType([psobject])]
-    Param
+    param
     (
-        [Parameter(Position=0,
-            Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string[]] $DistinguishedName,
-        [Parameter(Position=2,
-            Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string] $Destination,
-        [Parameter(Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [string] $Server,
-        [Parameter(Mandatory=$true,
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)]
-            [System.Management.Automation.CredentialAttribute()]
-            $Credential,
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [switch] $SecureSocketLayer,
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [string] $TimeOut = "10000",
-        [Parameter(Mandatory=$false,
-            ValueFromPipelineByPropertyName=$false)]
-            [switch] $PassThru
+        [Parameter(Position = 0,
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string[]] $DistinguishedName,
+        [Parameter(Position = 2,
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string] $Destination,
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string] $Server,
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [System.Management.Automation.CredentialAttribute()]
+        $Credential,
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [switch] $SecureSocketLayer,
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [string] $TimeOut = "10000",
+        [Parameter(Mandatory = $false,
+            ValueFromPipelineByPropertyName = $false)]
+        [switch] $PassThru
     )
-    BEGIN
-    {
+    begin {
         Write-Verbose 'Starting Move-LdapUser'
         Write-Verbose "Loading required assemblies"
         Add-Type -AssemblyName System.DirectoryServices.Protocols -ErrorAction Stop
         Add-Type -AssemblyName System.Net -ErrorAction Stop
         $Scope = [System.DirectoryServices.Protocols.SearchScope]::Subtree
-        $attrlist = ,"*"
+        $attrlist = , "*"
         Connect-LdapServer -Server $Server -Credential $Credential -ErrorAction Stop
     }
-    PROCESS
-    {
+    process {
         Write-Verbose "Moving $DistinguishedName"
         $ModifyRequest = New-Object "System.DirectoryServices.Protocols.ModifyDNRequest"
         $ModifyRequest.DeleteOldRdn = $true
         $ModifyRequest.DistinguishedName = $DistinguishedName
-        $NewName =     $DistinguishedName.Split(",")[0]
+        $NewName = $DistinguishedName.Split(",")[0]
         $ModifyRequest.NewName = $NewName
         $ModifyRequest.NewParentDistinguishedName = $Destination
-        $Result      = $global:LdapConnection.SendRequest($ModifyRequest)
-        $WriteOuput  = $NewName + "," + $Destination
+        $Result = $global:LdapConnection.SendRequest($ModifyRequest)
+        $WriteOuput = $NewName + "," + $Destination
         Write-Output   $WriteOuput
         Write-Output   $Result.ResultCode
         Write-Output   $Result.ErrorMessage
     }
-    END
-    {
+    end {
         Connect-LdapServer -Disconnect
         Write-Verbose 'End Move-LdapUser'
     }
 }
-Export-ModuleMember -function Move-LdapUser
+Export-ModuleMember -Function Move-LdapUser

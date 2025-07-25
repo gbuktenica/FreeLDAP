@@ -1,7 +1,7 @@
 # FreeLDAP
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Copyright Kinetic IT](https://img.shields.io/badge/Copyright-Glen_Buktenica-blue.svg)](https://github.com/gbuktenica)
+[![Copyright Glen Buktenica](https://img.shields.io/badge/Copyright-Glen_Buktenica-blue.svg)](https://github.com/gbuktenica)
 
 A PowerShell module that uses the Dot NET class System.DirectoryServices.Protocols to manage LDAP objects in standards compliant directories.
 
@@ -26,19 +26,13 @@ C:\Users\<ProfilePath>\Documents\WindowsPowerShell\Modules\FreeLDAP\<version>
 
   eg C:\Users\Glen\Documents\WindowsPowerShell\Modules\FreeLDAP\1.0.0.0
 
-## Usage
-
-TODO: Write usage instructions
-
-## Contributing
-
-We use SemVer for versioning.
-
 ## History
 
 1.0.0.0 Initial release   - stable
 
 1.0.0.1 Alpha development - unstable
+
+1.1 Update version in order to republish due to hosting corruption
 
 ## Credits
 
